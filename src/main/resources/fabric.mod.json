@@ -7,7 +7,7 @@
 	"authors": [
 		"yuki"
 	],
-	"license": "CC0-1.0",
+	"license": "CC-BY-4.0",
 	"icon": "assets/snowautoselect/icon.png",
 	"environment": "client",
 	"entrypoints": {
