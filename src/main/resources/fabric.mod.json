@@ -1,0 +1,33 @@
+{
+	"schemaVersion": 1,
+	"id": "snowautoselect",
+	"version": "${version}",
+	"name": "SnowAutoSelect",
+	"description": "Auto-clicks bracketed dialogue options in Hypixel Skyblock chat",
+	"authors": [
+		"yuki"
+	],
+	"license": "CC0-1.0",
+	"icon": "assets/snowautoselect/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"main": [
+			"yuki.snowautoselect.SnowAutoSelect"
+		],
+		"client": [
+			"yuki.snowautoselect.client.SnowAutoSelectClient"
+		]
+	},
+	"mixins": [
+		{
+			"config": "snowautoselect.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.3",
+		"minecraft": "~26.1.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
