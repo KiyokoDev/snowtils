@@ -10,11 +10,15 @@ import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
 public class SnowAutoSelectClient implements ClientModInitializer {
-	public static boolean enabled = true;
+	public static boolean enabled;
 	private static KeyMapping toggleKey;
+	private static ModConfig config;
 
 	@Override
 	public void onInitializeClient() {
+		config = ModConfig.load();
+		enabled = config.enabled;
+
 		toggleKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 			"key.snowautoselect.toggle",
 			GLFW.GLFW_KEY_H,
@@ -24,6 +28,8 @@ public class SnowAutoSelectClient implements ClientModInitializer {
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (toggleKey.consumeClick()) {
 				enabled = !enabled;
+				config.enabled = enabled;
+				config.save();
 				if (client.player != null) {
 					client.player.sendSystemMessage(Component.literal(
 						"§b[SnowAutoSelect] §7Auto-accept: " + (enabled ? "§aON" : "§cOFF")
