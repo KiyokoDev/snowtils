@@ -57,8 +57,12 @@ public class SkyblockDialogueHandler {
 		return false;
 	}
 
+	private static final Set<String> RANKS = Set.of("VIP", "VIP+", "MVP", "MVP+", "MVP++", "YOUTUBE", "YOUTUBE+");
+
 	private static boolean isBracketed(Component component) {
 		String text = component.getString().replaceAll("§[0-9a-fk-or]", "").trim();
-		return text.startsWith("[") && text.endsWith("]");
+		if (!text.startsWith("[") || !text.endsWith("]")) return false;
+		String inner = text.substring(1, text.length() - 1).trim();
+		return !RANKS.contains(inner);
 	}
 }
