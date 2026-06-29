@@ -1,6 +1,6 @@
-package yuki.snowautoselect.client.mixin;
+package yuki.snowtils.client.mixin;
 
-import yuki.snowautoselect.client.SkyblockDialogueHandler;
+import yuki.snowtils.client.SkyblockDialogueHandler;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundDisguisedChatPacket;
 import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;

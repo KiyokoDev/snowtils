@@ -1,10 +1,7 @@
 {
 	"required": true,
-	"package": "yuki.snowautoselect.client.mixin",
+	"package": "yuki.snowtils.mixin",
 	"compatibilityLevel": "JAVA_25",
-	"client": [
-		"ChatPacketMixin"
-	],
 	"injectors": {
 		"defaultRequire": 1
 	},

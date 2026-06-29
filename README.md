@@ -1,4 +1,4 @@
-# SnowAutoSelect
+# Snowtils
 
 > **Disclaimer:** This mod automates in-game actions which may be against Hypixel's rules. Use at your own risk. I am not responsible for any bans or penalties.
 

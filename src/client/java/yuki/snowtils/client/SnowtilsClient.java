@@ -1,6 +1,6 @@
-package yuki.snowautoselect.client;
+package yuki.snowtils.client;
 
-import yuki.snowautoselect.SnowAutoSelect;
+import yuki.snowtils.Snowtils;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
 
-public class SnowAutoSelectClient implements ClientModInitializer {
+public class SnowtilsClient implements ClientModInitializer {
 	public static boolean enabled;
 	private static KeyMapping toggleKey;
 	private static ModConfig config;
@@ -20,7 +20,7 @@ public class SnowAutoSelectClient implements ClientModInitializer {
 		enabled = config.enabled;
 
 		toggleKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-			"key.snowautoselect.toggle",
+			"key.snowtils.toggle",
 			GLFW.GLFW_KEY_H,
 			KeyMapping.Category.MISC
 		));
@@ -32,7 +32,7 @@ public class SnowAutoSelectClient implements ClientModInitializer {
 				config.save();
 				if (client.player != null) {
 					client.player.sendSystemMessage(Component.literal(
-						"§b[SnowAutoSelect] §7Auto-accept: " + (enabled ? "§aON" : "§cOFF")
+						"§b[Snowtils] §7Auto-accept: " + (enabled ? "§aON" : "§cOFF")
 					));
 				}
 			}

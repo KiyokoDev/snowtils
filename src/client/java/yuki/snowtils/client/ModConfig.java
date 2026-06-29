@@ -1,6 +1,6 @@
-package yuki.snowautoselect.client;
+package yuki.snowtils.client;
 
-import yuki.snowautoselect.SnowAutoSelect;
+import yuki.snowtils.Snowtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.minecraft.client.Minecraft;
@@ -13,7 +13,7 @@ import java.nio.file.Path;
 
 public class ModConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-	private static final Path CONFIG_PATH = Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("snowautoselect.json");
+	private static final Path CONFIG_PATH = Minecraft.getInstance().gameDirectory.toPath().resolve("config").resolve("snowtils.json");
 
 	public boolean enabled = true;
 
@@ -25,7 +25,7 @@ public class ModConfig {
 				}
 			}
 		} catch (IOException e) {
-			SnowAutoSelect.LOGGER.warn("Failed to load config", e);
+			Snowtils.LOGGER.warn("Failed to load config", e);
 		}
 		return new ModConfig();
 	}
@@ -37,7 +37,7 @@ public class ModConfig {
 				GSON.toJson(this, writer);
 			}
 		} catch (IOException e) {
-			SnowAutoSelect.LOGGER.warn("Failed to save config", e);
+			Snowtils.LOGGER.warn("Failed to save config", e);
 		}
 	}
 }

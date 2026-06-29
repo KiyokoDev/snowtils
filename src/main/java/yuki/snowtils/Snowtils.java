@@ -1,4 +1,4 @@
-package yuki.snowautoselect;
+package yuki.snowtils;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
@@ -6,13 +6,13 @@ import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SnowAutoSelect implements ModInitializer {
-	public static final String MOD_ID = "snowautoselect";
+public class Snowtils implements ModInitializer {
+	public static final String MOD_ID = "snowtils";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("SnowAutoSelect initialized!");
+		LOGGER.info("Snowtils initialized!");
 	}
 
 	public static Identifier id(String path) {

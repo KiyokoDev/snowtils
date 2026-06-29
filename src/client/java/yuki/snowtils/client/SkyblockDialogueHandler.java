@@ -1,6 +1,6 @@
-package yuki.snowautoselect.client;
+package yuki.snowtils.client;
 
-import yuki.snowautoselect.SnowAutoSelect;
+import yuki.snowtils.Snowtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -16,7 +16,7 @@ public class SkyblockDialogueHandler {
 	private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
 	public static void handleDialogue(Component message) {
-		if (!SnowAutoSelectClient.enabled) return;
+		if (!SnowtilsClient.enabled) return;
 		if (Minecraft.getInstance().screen != null) return;
 
 		var player = Minecraft.getInstance().player;
@@ -29,7 +29,7 @@ public class SkyblockDialogueHandler {
 		var style = component.getStyle();
 		var clickEvent = style.getClickEvent();
 
-		if (clickEvent instanceof ClickEvent.RunCommand runCmd && isBracketed(component)) {
+		if (clickEvent instanceof ClickEvent.RunCommand runCmd && isBracketed(component) && !isSkippedText(component)) {
 			String command = runCmd.command();
 			String normalised = command.startsWith("/") ? command.substring(1) : command;
 
@@ -38,11 +38,11 @@ public class SkyblockDialogueHandler {
 					Minecraft.getInstance().execute(() -> {
 						var conn = Minecraft.getInstance().getConnection();
 						if (conn != null) {
-							SnowAutoSelect.LOGGER.info("[SnowAutoSelect] Auto-accepting dialogue: /{}", normalised);
+							Snowtils.LOGGER.info("[Snowtils] Auto-accepting dialogue: /{}", normalised);
 							conn.sendCommand(normalised);
 							var player = Minecraft.getInstance().player;
 							if (player != null) {
-								player.sendSystemMessage(Component.literal("§b[SnowAutoSelect] §7Clicked first dialogue option."));
+								player.sendSystemMessage(Component.literal("§b[Snowtils] §7Clicked first dialogue option."));
 							}
 						}
 					});
@@ -58,11 +58,20 @@ public class SkyblockDialogueHandler {
 	}
 
 	private static final Set<String> RANKS = Set.of("VIP", "VIP+", "MVP", "MVP+", "MVP++", "YOUTUBE", "YOUTUBE+");
+	private static final Set<String> SKIPPED_PREFIXES = Set.of("is holding ", "is wearing ", "is friends with a ");
 
 	private static boolean isBracketed(Component component) {
 		String text = component.getString().replaceAll("§[0-9a-fk-or]", "").trim();
 		if (!text.startsWith("[") || !text.endsWith("]")) return false;
 		String inner = text.substring(1, text.length() - 1).trim();
 		return !RANKS.contains(inner);
+	}
+
+	private static boolean isSkippedText(Component component) {
+		String text = component.getString().replaceAll("§[0-9a-fk-or]", "").trim();
+		for (String prefix : SKIPPED_PREFIXES) {
+			if (text.startsWith(prefix)) return true;
+		}
+		return false;
 	}
 }
