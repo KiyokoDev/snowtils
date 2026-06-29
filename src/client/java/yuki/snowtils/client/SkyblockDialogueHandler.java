@@ -26,33 +26,42 @@ public class SkyblockDialogueHandler {
 	}
 
 	private static boolean processComponent(Component component) {
+		return processComponentWithContext(component, "");
+	}
+
+	private static boolean processComponentWithContext(Component component, String precedingText) {
 		var style = component.getStyle();
 		var clickEvent = style.getClickEvent();
 
-		if (clickEvent instanceof ClickEvent.RunCommand runCmd && isBracketed(component) && !isSkippedText(component)) {
-			String command = runCmd.command();
-			String normalised = command.startsWith("/") ? command.substring(1) : command;
+		if (clickEvent instanceof ClickEvent.RunCommand runCmd && isBracketed(component)) {
+			if (!containsSkippedPhrase(precedingText)) {
+				String command = runCmd.command();
+				String normalised = command.startsWith("/") ? command.substring(1) : command;
 
-			if (clickedCommands.add(normalised)) {
-				scheduler.schedule(() -> {
-					Minecraft.getInstance().execute(() -> {
-						var conn = Minecraft.getInstance().getConnection();
-						if (conn != null) {
-							Snowtils.LOGGER.info("[Snowtils] Auto-accepting dialogue: /{}", normalised);
-							conn.sendCommand(normalised);
-							var player = Minecraft.getInstance().player;
-							if (player != null) {
-								player.sendSystemMessage(Component.literal("§b[Snowtils] §7Clicked first dialogue option."));
+				if (clickedCommands.add(normalised)) {
+					scheduler.schedule(() -> {
+						Minecraft.getInstance().execute(() -> {
+							var conn = Minecraft.getInstance().getConnection();
+							if (conn != null) {
+								Snowtils.LOGGER.info("[Snowtils] Auto-accepting dialogue: /{}", normalised);
+								conn.sendCommand(normalised);
+								var player = Minecraft.getInstance().player;
+								if (player != null) {
+									player.sendSystemMessage(Component.literal("§b[Snowtils] §7Clicked first dialogue option."));
+								}
 							}
-						}
-					});
-				}, 350, TimeUnit.MILLISECONDS);
+						});
+					}, 350, TimeUnit.MILLISECONDS);
+				}
+				return true;
 			}
-			return true;
 		}
 
+		String text = component.getString().replaceAll("§[0-9a-fk-or]", "");
+		StringBuilder acc = new StringBuilder(precedingText).append(text);
 		for (Component child : component.getSiblings()) {
-			if (processComponent(child)) return true;
+			if (processComponentWithContext(child, acc.toString())) return true;
+			acc.append(child.getString().replaceAll("§[0-9a-fk-or]", ""));
 		}
 		return false;
 	}
@@ -67,10 +76,9 @@ public class SkyblockDialogueHandler {
 		return !RANKS.contains(inner);
 	}
 
-	private static boolean isSkippedText(Component component) {
-		String text = component.getString().replaceAll("§[0-9a-fk-or]", "").trim();
-		for (String prefix : SKIPPED_PREFIXES) {
-			if (text.startsWith(prefix)) return true;
+	private static boolean containsSkippedPhrase(String text) {
+		for (String phrase : SKIPPED_PREFIXES) {
+			if (text.contains(phrase)) return true;
 		}
 		return false;
 	}
